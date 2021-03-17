@@ -164,10 +164,7 @@ module Bundler
 
         if requires_checkout? && !@copied
           fetch
-          Bundler.ui.debug "  * Checking out revision: #{ref}"
-          git_proxy.copy_to(install_path, submodules)
-          serialize_gemspecs_in(install_path)
-          @copied = true
+          checkout
         end
 
         local_specs
@@ -180,10 +177,7 @@ module Bundler
         print_using_message "Using #{version_message(spec, options[:previous_spec])} from #{self}"
 
         if (requires_checkout? && !@copied) || force
-          Bundler.ui.debug "  * Checking out revision: #{ref}"
-          git_proxy.copy_to(install_path, submodules)
-          serialize_gemspecs_in(install_path)
-          @copied = true
+          checkout
         end
 
         generate_bin_options = { :disable_extensions => !Bundler.rubygems.spec_missing_extensions?(spec), :build_args => options[:build_args] }
@@ -243,6 +237,13 @@ module Bundler
       end
 
       private
+
+      def checkout
+        Bundler.ui.debug "  * Checking out revision: #{ref}"
+        git_proxy.copy_to(install_path, submodules)
+        serialize_gemspecs_in(install_path)
+        @copied = true
+      end
 
       def serialize_gemspecs_in(destination)
         destination = destination.expand_path(Bundler.root) if destination.relative?
