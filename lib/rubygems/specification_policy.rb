@@ -102,6 +102,8 @@ class Gem::SpecificationPolicy
 
     validate_dependencies
 
+    validate_required_ruby_version
+
     validate_extensions
 
     validate_removed_attributes
@@ -221,6 +223,15 @@ duplicate dependency on #{dep}, (#{prev.requirement}) use:
     end
     if warning_messages.any?
       warning_messages.each {|warning_message| warning warning_message }
+    end
+  end
+
+  def validate_required_ruby_version
+    op, dep_version = @specification.required_ruby_version.requirements.first
+    segments = dep_version.segments
+
+    if (op == '>' || op == '>=') && segments == [0]
+      warning "please specify minimal required ruby for your RubyGem"
     end
   end
 

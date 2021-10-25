@@ -25,9 +25,10 @@ class TestGemCommandsBuildCommand < Gem::TestCase
       File.umask(umask_orig)
     end
 
-    @gem = util_spec "some_gem" do |s|
-      s.license = "AGPL-3.0"
-      s.files = ["README.md"]
+    @gem = util_spec 'some_gem' do |s|
+      s.license = 'AGPL-3.0'
+      s.files = ['README.md']
+      s.required_ruby_version = '2.3.0'
     end
 
     @cmd = Gem::Commands::BuildCommand.new
@@ -176,8 +177,9 @@ class TestGemCommandsBuildCommand < Gem::TestCase
   end
 
   def test_execute_strict_with_warnings
-    bad_gem = util_spec "some_bad_gem" do |s|
-      s.files = ["README.md"]
+    bad_gem = util_spec 'some_bad_gem' do |s|
+      s.files = ['README.md']
+      s.required_ruby_version = '>= 1.9.3'
     end
 
     gemspec_file = File.join(@tempdir, bad_gem.spec_name)
