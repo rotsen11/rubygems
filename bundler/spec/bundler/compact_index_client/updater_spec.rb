@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "net/http"
+require "bundler/vendored_net_http"
 require "bundler/compact_index_client"
 require "bundler/compact_index_client/updater"
 require "tmpdir"

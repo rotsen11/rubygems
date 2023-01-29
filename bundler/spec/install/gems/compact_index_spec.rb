@@ -205,7 +205,7 @@ The checksum of /versions does not match the checksum provided by the server! So
     expect(the_bundle).to include_gems "rack 1.0.0"
   end
 
-  it "handles host redirects without Net::HTTP::Persistent" do
+  it "handles host redirects without Gem::Net::HTTP::Persistent" do
     gemfile <<-G
       source "#{source_uri}"
       gem "rack"
@@ -729,7 +729,7 @@ The checksum of /versions does not match the checksum provided by the server! So
       # Install a monkeypatch that reproduces the effects of openssl raising
       # a certificate validation error when RubyGems tries to connect.
       gemfile <<-G
-        class Net::HTTP
+        class Gem::Net::HTTP
           def start
             raise OpenSSL::SSL::SSLError, "certificate verify failed"
           end

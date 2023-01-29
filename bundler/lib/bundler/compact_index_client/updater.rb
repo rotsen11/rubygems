@@ -45,13 +45,13 @@ module Bundler
         end
 
         response = @fetcher.call(remote_path, headers)
-        return nil if response.is_a?(Net::HTTPNotModified)
+        return nil if response.is_a?(Gem::Net::HTTPNotModified)
 
         content = response.body
 
         etag = (response["ETag"] || "").gsub(%r{\AW/}, "")
         correct_response = SharedHelpers.filesystem_access(local_temp_path) do
-          if response.is_a?(Net::HTTPPartialContent) && local_temp_path.size.nonzero?
+          if response.is_a?(Gem::Net::HTTPPartialContent) && local_temp_path.size.nonzero?
             local_temp_path.open("a") {|f| f << slice_body(content, 1..-1) }
 
             etag_for(local_temp_path) == etag
