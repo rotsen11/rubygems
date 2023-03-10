@@ -519,10 +519,6 @@ if you believe they were disclosed to a third party.
     assert_equal(false, @cfg.install_extension_in_lib)
   end
 
-  def util_config_file(args = @cfg_args)
-    @cfg = Gem::ConfigFile.new args
-  end
-
   def test_disable_default_gem_server
     File.open @temp_conf, "w" do |fp|
       fp.puts ":disable_default_gem_server: true"
@@ -557,5 +553,9 @@ if you believe they were disclosed to a third party.
     actual = Gem::ConfigFile.dump_with_rubygems_yaml(symbol_key_hash)
 
     assert_equal("---\n:foo: \"bar\"\n", actual)
+  end
+
+  def util_config_file(args = @cfg_args)
+    @cfg = Gem::ConfigFile.new args
   end
 end
