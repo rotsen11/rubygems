@@ -156,7 +156,7 @@ install:
     pend "terminates on mswin" if vc_windows? && ruby_repo?
 
     @orig_install_extension_in_lib = Gem.configuration.install_extension_in_lib
-    Gem.configuration.install_extension_in_lib = true
+    Gem.configuration.install_extension_in_lib = false
 
     @spec.extensions << "ext/extconf.rb"
 
