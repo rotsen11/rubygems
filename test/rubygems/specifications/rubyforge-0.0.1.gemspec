@@ -7,9 +7,9 @@ Gem::Specification.new do |s|
   s.require_paths         = ["lib"]
   s.summary               = "A very bar gem"
   s.authors               = ["unknown"]
-  s.license               = 'MIT'
-  s.homepage              = 'http://example.com'
-  s.files                 = ['README.md']
-  s.rubyforge_project     = 'abc'
-  s.required_ruby_version = '>= 1.9.3'
+  s.license               = "MIT"
+  s.homepage              = "http://example.com"
+  s.files                 = ["README.md"]
+  s.rubyforge_project     = "abc"
+  s.required_ruby_version = ">= 1.9.3"
 end

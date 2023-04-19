@@ -89,12 +89,12 @@ end
     # is not set.
     Gem.instance_variable_set(:'@default_source_date_epoch', nil)
 
-    @a1 = util_spec 'a', '1' do |s|
-      s.required_ruby_version = '>= 2.3.0'
-      s.executable = 'exec'
-      s.test_file = 'test/suite.rb'
-      s.requirements << 'A working computer'
-      s.license = 'MIT'
+    @a1 = util_spec "a", "1" do |s|
+      s.required_ruby_version = ">= 2.3.0"
+      s.executable = "exec"
+      s.test_file = "test/suite.rb"
+      s.requirements << "A working computer"
+      s.license = "MIT"
 
       s.mark_version
       s.files = %w[lib/code.rb]
@@ -2693,7 +2693,7 @@ duplicate dependency on c (>= 1.2.3, development), (~> 1.2) use:
       end
 
       assert_equal <<-EXPECTED, @ui.error
-#{w}:  please specify minimal required ruby for your RubyGem
+#{w}:  make sure you specify the oldest ruby version that you want your gem to support by setting the `required_ruby_version` gemspec attribute
 #{w}:  See https://guides.rubygems.org/specification-reference/ for help
       EXPECTED
     end
@@ -2703,14 +2703,14 @@ duplicate dependency on c (>= 1.2.3, development), (~> 1.2) use:
     util_setup_validate
 
     Dir.chdir @tempdir do
-      @a1.required_ruby_version = '>= 0'
+      @a1.required_ruby_version = ">= 0"
 
       use_ui @ui do
         @a1.validate
       end
 
       assert_equal <<-EXPECTED, @ui.error
-#{w}:  please specify minimal required ruby for your RubyGem
+#{w}:  make sure you specify the oldest ruby version that you want your gem to support by setting the `required_ruby_version` gemspec attribute
 #{w}:  See https://guides.rubygems.org/specification-reference/ for help
       EXPECTED
     end
@@ -2720,13 +2720,13 @@ duplicate dependency on c (>= 1.2.3, development), (~> 1.2) use:
     util_setup_validate
 
     Dir.chdir @tempdir do
-      @a1.required_ruby_version = '>= 2.3.0'
+      @a1.required_ruby_version = ">= 2.3.0"
 
       use_ui @ui do
         @a1.validate
       end
 
-      assert_equal '', @ui.error, 'warning'
+      assert_equal "", @ui.error, "warning"
     end
   end
 

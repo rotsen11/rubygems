@@ -227,11 +227,8 @@ duplicate dependency on #{dep}, (#{prev.requirement}) use:
   end
 
   def validate_required_ruby_version
-    op, dep_version = @specification.required_ruby_version.requirements.first
-    segments = dep_version.segments
-
-    if (op == '>' || op == '>=') && segments == [0]
-      warning "please specify minimal required ruby for your RubyGem"
+    if @specification.required_ruby_version.requirements == [Gem::Requirement::DefaultRequirement]
+      warning "make sure you specify the oldest ruby version that you want your gem to support by setting the `required_ruby_version` gemspec attribute"
     end
   end
 
