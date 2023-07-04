@@ -1321,8 +1321,8 @@ RSpec.describe "bundle update --bundler" do
     # Only updates properly on modern RubyGems.
 
     if Gem.rubygems_version >= Gem::Version.new("3.3.0.dev")
-      expect(out).to include("Updating bundler to 2.3.10")
-      expect(out).to include("Using bundler 2.3.10")
+      expect(out).to include("Updating bundler to 2.4.15")
+      expect(out).to include("Using bundler 2.4.15")
       expect(out).not_to include("Installing Bundler 2.3.9 and restarting using that version.")
 
       expect(lockfile).to eq <<~L
@@ -1338,10 +1338,10 @@ RSpec.describe "bundle update --bundler" do
           rack
 
         BUNDLED WITH
-           2.3.10
+           2.4.15
       L
 
-      expect(the_bundle).to include_gems "bundler 2.3.10"
+      expect(the_bundle).to include_gems "bundler 2.4.15"
     end
 
     expect(the_bundle).to include_gems "rack 1.0"
