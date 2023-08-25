@@ -235,19 +235,14 @@ module Bundler
 
       version = Gem::Version.new(version)
       platform = platform ? Gem::Platform.new(platform) : Gem::Platform::RUBY
-      source = "#{@lockfile_path}:#{@pos} in the CHECKSUMS lockfile section"
-      checksums = checksums.split(",").map do |c|
-        algo, digest = c.split("-", 2)
-        Checksum::Single.new(algo, digest, source)
-      end
-
+      checksums = Checksum.from_lock(checksums, "#{@lockfile_path}:#{@pos} in the CHECKSUMS lockfile section")
       full_name = GemHelpers.spec_full_name(name, version, platform)
 
       # Don't raise exception if there's a checksum for a gem that's not in the lockfile,
       # we prefer to heal invalid lockfiles
       return unless spec = @specs[full_name]
 
-      spec.source.checksum_store.register_full_name(full_name, checksums)
+      spec.source.checksum_store.register(full_name, checksums)
     end
 
     def parse_spec(line)

@@ -4,7 +4,7 @@ module Spec
   module Checksums
     class ChecksumsBuilder
       def initialize
-        @checksums = []
+        @checksums = {}
       end
 
       def repo_gem(gem_repo, gem_name, gem_version, platform = nil, empty: false)
@@ -14,12 +14,16 @@ module Spec
           "#{gem_repo}/gems/#{gem_name}-#{gem_version}.gem"
         end
 
-        checksum = { "sha256" => sha256_checksum(gem_file) } unless empty
-        @checksums << Bundler::Checksum.new(gem_name, gem_version, platform, checksum)
+        checksum = Bundler::Checksum.new("sha256", sha256_checksum(gem_file), 'Checksum builder') unless empty
+        @checksums[GemHelpers.lock_name(spec.name, spec.version, spec.platform)] = checksum
       end
 
       def to_lock
-        @checksums.map(&:to_lock).sort.join.strip
+        @checksums.map { |gem, checksum|
+          out = "  #{gem} "
+          out << Bundler::Checksum.to_lock([checksum]) if checksum
+          out << "\n"
+        }.sort.join.strip
       end
 
       private

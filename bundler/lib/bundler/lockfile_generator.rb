@@ -69,10 +69,12 @@ module Bundler
     def add_checksums
       out << "\nCHECKSUMS\n"
 
-      empty_store = Checksum::Store.new
-
       definition.resolve.sort_by(&:full_name).each do |spec|
-        out << (spec.source.checksum_store || empty_store)[spec].to_lock
+        next unless spec.source.checksum_store
+        next if (checksums = spec.source.checksum_store[spec.full_name]).empty?
+        out << "  #{GemHelpers.lock_name(spec.name, spec.version, spec.platform)} "
+        out << Checksum.to_lock(checksums.values)
+        out << "\n"
       end
     end
 

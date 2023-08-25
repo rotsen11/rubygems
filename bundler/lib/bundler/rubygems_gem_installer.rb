@@ -122,9 +122,15 @@ module Bundler
       return true unless source.respond_to?(:with_read_io)
       digests = Bundler::Checksum.digests_from_file_source(source).transform_values(&:hexdigest!)
 
-      checksum = checksum_store[spec]
-      unless checksum.match_digests?(digests)
-        expected = checksum_store.send(:store)[spec.full_name]
+      Checksum.match_digests?(checksum_store[spec.full_name], digests)
+
+      if checksum_store[spec.full_name].transform_values(&:digest)
+        checksum_store.register(
+          spec.full_name,
+          digests.map {|algo, digest| Checksum.new(algo, digest, "downloaded gem @ `#{source.path}`") }
+        )
+      else
+        expected = checksum_store[spec.full_name]
 
         raise SecurityError, <<~MESSAGE
           Bundler cannot continue installing #{spec.name} (#{spec.version}).
@@ -147,24 +153,16 @@ module Bundler
           1. run `bundle config set --local disable_checksum_validation true` to turn off checksum verification
           2. run `bundle install`
 
-          #{expected.map do |algo, multi|
+          #{expected.map do |algo, checksum|
             next unless actual = digests[algo]
-            next if actual == multi
+            next if actual == checksum.digest
 
-            "(More info: The expected #{algo.upcase} checksum was #{multi.digest.inspect}, but the " \
-            "checksum for the downloaded gem was #{actual.inspect}. The expected checksum came from: #{multi.sources.join(", ")})"
+            "(More info: The expected #{algo.upcase} checksum was #{checksum.digest.inspect}, but the " \
+            "checksum for the downloaded gem was #{actual.inspect}. The expected checksum came from: #{checksum.sources.join(", ")})"
           end.compact.join("\n")}
           MESSAGE
       end
-      register_digests(digests, checksum_store, source)
       true
-    end
-
-    def register_digests(digests, checksum_store, source)
-      checksum_store.register(
-        spec,
-        digests.map {|algo, digest| Checksum::Single.new(algo, digest, "downloaded gem @ `#{source.path}`") }
-      )
     end
   end
 end
