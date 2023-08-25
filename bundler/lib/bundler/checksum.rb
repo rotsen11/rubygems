@@ -80,7 +80,7 @@ module Bundler
           * #{sources.join("\n* ")}
         MESSAGE
       end
-      @sources.merge(other.sources)
+      @sources.merge!(other.sources)
       self
     end
 
