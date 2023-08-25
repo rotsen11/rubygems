@@ -54,7 +54,7 @@ module Bundler
     end
 
     def ==(other)
-      other.is_a?(Single) && other.digest == digest && other.algo == algo && sources == other.sources
+      other.is_a?(self.class) && other.digest == digest && other.algo == algo && sources == other.sources
     end
 
     def hash
