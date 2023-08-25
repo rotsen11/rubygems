@@ -76,7 +76,7 @@ module Bundler
       unless digest == other.digest
         raise SecurityError, <<~MESSAGE
           #{other}
-          #{self} from:
+          #{to_lock} from:
           * #{sources.join("\n* ")}
         MESSAGE
       end
