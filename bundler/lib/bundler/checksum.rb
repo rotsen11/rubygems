@@ -71,7 +71,7 @@ module Bundler
       "#{algo}-#{digest}"
     end
 
-    def merge(other)
+    def merge!(other)
       raise ArgumentError, "cannot merge checksums of different algorithms" unless algo == other.algo
       unless digest == other.digest
         raise SecurityError, <<~MESSAGE
