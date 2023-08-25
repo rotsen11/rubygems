@@ -114,8 +114,8 @@ module Bundler
 
       def register(full_name, checksums)
         Array(checksums).each do |checksum|
+          @store[full_name][checksum.algo]&.merge!(checksum)
           @store[full_name][checksum.algo] ||= checksum
-          @store[full_name][checksum.algo].merge(checksum)
         end
       rescue SecurityError => e
         raise e.exception(<<~MESSAGE)
