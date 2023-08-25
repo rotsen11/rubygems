@@ -122,9 +122,7 @@ module Bundler
       return true unless source.respond_to?(:with_read_io)
       digests = Bundler::Checksum.digests_from_file_source(source).transform_values(&:hexdigest!)
 
-      Checksum.match_digests?(checksum_store[spec.full_name], digests)
-
-      if checksum_store[spec.full_name].transform_values(&:digest)
+      if Checksum.match_digests?(checksum_store[spec.full_name], digests)
         checksum_store.register(
           spec.full_name,
           digests.map {|algo, digest| Checksum.new(algo, digest, "downloaded gem @ `#{source.path}`") }
